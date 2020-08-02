@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <title>充值系统</title>
+        <script src="js/jquery-3.5.1.min.js"></script>
+        <style>
+            *{
+                margin: 0px;
+            }
+            #formsubmit{
+                margin: 50px 150px;
+                border: 1px solid #e7e7e7;
+                box-shadow: 0px 3px 10px #e7e6e5;
+            }
+            #bd{
+                color: #535353;
+                font-family: "Open Sans", Helvetica , Arial, sans-serif;
+                padding: 50px;
+            }
+            li{
+                list-style: none;
+                padding: 10px 0px;
+            }
+            p{
+                padding: 5px 0px 0px 0px;
+                font-size: 17px;
+            }
+            .ts{
+                padding: 5px 0px;
+                font-size: 13px;
+                color: #999;
+            }
+            .sr{
+                width: 100%;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                padding: 8px 12px;
+                font-size: 14px;
+                -webkit-box-sizing: border-box;
+                -moz-box-sizing: border-box;
+                box-sizing: border-box;
+            }
+            .but{
+                box-sizing: border-box;
+                padding: 6px 12px;
+                color: #fff;
+                background-color: #337ab7;
+                border-color: #2e6da4;
+                font-size: 14px;
+                border: 1px solid #bbb;
+                box-shadow: 1px 3px 12px #e7e7e7;
+                border-radius: 4px;
+                cursor: pointer;
+                letter-spacing: 2px;
+                margin: 0 100px;
+            }
+            .but.re{
+                background-color: #FFF;
+                color: #000;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="formsubmit">
+            <form method="GET" id="edit-profile" action="https://www.mczhifu.com/index.php/Doserverpay/create.html">
+                <div id="bd">
+                    <input type="hidden" name="id" value="1780">
+                    <h2 style="padding-bottom: 20px;">服务器充值</h2>
+                    <li>
+                        <p>你的昵称 (必填)：</p>
+                        <p class="ts">游戏内的用户名</p>
+                        <input class="sr" type="text" name="playername" id="name">
+                    </li>
+                    <li>
+                        <p>充值金额 (必填)：</p>
+                        <p class="ts">消费人民币</p>
+                        <input class="sr" type="text" name="money" id="money">
+                    </li>
+                    <li>
+                        <p>支付方式 (必选)：</p>
+                        <p class="ts">付款的方式</p>
+                        <table style="width: 100%;">
+                            <tr align="center">
+                                <td>
+                                    <label style="cursor: pointer;" for="qpay">
+                                        <input style="cursor: pointer;" type="radio" name="payway" value="ddm_tencent_all" id="qpay">
+                                        <img style="cursor: pointer;" src="data:image/jpeg;base64,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" align="absmiddle" alt="QQ钱包">
+                                    </label>
+                                </td>
+                                <td>
+                                    <label style="cursor: pointer;" for="wxpay">
+                                        <input style="cursor: pointer;" type="radio" name="payway" value="ddm_wechat_all" id="wxpay">
+                                        <img style="cursor: pointer;" src="data:image/jpeg;base64,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" align="absmiddle" alt="微信支付">
+                                    </label>
+                                </td>
+                                <td>
+                                    <label style="cursor: pointer;" for="alipay">
+                                        <input style="cursor: pointer;" type="radio" name="payway" value="ddm_alipay_all" id="alipay">
+                                        <img style="cursor: pointer;" src="data:image/jpeg;base64,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" align="absmiddle" alt="支付宝">
+                                    </label>
+                                </td>
+                            </tr>
+                        </table>
+                    </li>
+                </div>
+                <div style="background-color: #f5f5f5;padding:30px;text-align:center">
+                    <button class="but tj" id="tj" type="submit">点击付款</button>
+                    <button class="but re" id="inputreset" type="reset">重新填写</button>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
