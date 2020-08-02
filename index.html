@@ -14,6 +14,7 @@
             #bd{
                 color: #535353;
                 font-family: "Open Sans", Helvetica , Arial, sans-serif;
+                cursor: default;
                 padding: 50px;
             }
             li{
@@ -57,32 +58,162 @@
                 background-color: #FFF;
                 color: #000;
             }
+            #tj{
+                background-color: #f5f5f5;
+                padding:30px;
+                text-align:center;
+            }
+            #jsq{
+                background-color: #f0f0f0;
+            }
         </style>
+        <script>
+            $(function () {
+                //输入用户名
+                $("#name").on("input", function () {
+                    var playername = $(this).val();
+                    var namet = $("#namet");
+
+                    //正则表达式 匹配中英数字以及下划线
+                    var zz = /^[\u4e00-\u9fa5_a-zA-Z0-9]{2,16}$/
+                    if (!zz.test(playername)){
+                        namet.css("color", "red");
+                        namet.html("请输入正确的用户名");
+                        return;
+                    }
+                    
+                    namet.css("color", "green");
+                    namet.html("你好, " + playername);
+                });
+
+                //输入金额
+                $("#money").on("input", function () {
+                    var money = $(this).val();
+                    var namet = $("#moneyt");
+                    var jsq = $("#jsq")
+
+                    $("#jsq").val(0 + "点券");
+                    $("#jsqt").css("color", "red");
+                    $("#jsqt").html("无法预计算点券数额");
+                    //正则表达式 匹配数字(小数点后不能超过两位)
+                    var zz = /^(\-)?\d+(\.\d{1,2})?$/
+                    if (!zz.test(money)){
+                        namet.css("color", "red");
+                        namet.html("请输入正确的金额");
+                        return;
+                    }
+
+                    //最少金额
+                    if (money < 1){
+                        namet.css("color", "red");
+                        namet.html("你氪的太少了哟!");
+                        return;
+                    }
+
+                    //最大金额
+                    if (money > 1000000){
+                        namet.css("color", "red");
+                        namet.html("你不能氪这么多!");
+                        return;
+                    }
+                    
+                    namet.css("color", "green");
+                    if (money < 100){
+                        namet.html("适度氪金益脑");
+                    }else if(money < 1000){
+                        namet.html("合理安排氪金");
+                    }else if(money < 10000){
+                        namet.html("享受氪金生活");
+                    }else if(money < 100000){
+                        namet.html("沉迷氪金伤身");
+                    }else {
+                        namet.html("你是认真的么?");
+                    }
+
+                    //计算器
+                    $("#jsq").val(money * 100 + "点券");
+                    $("#jsqt").css("color", "green");
+                    $("#jsqt").html("支付成功后你将获得如下点券");
+                });
+
+                $(":radio[name='payway']").change(function (){
+                    var payway = $(this);
+
+                    $("#paywayt").css("color", "green");
+                    switch (payway.val()) {
+                        case "ddm_tencent_all": $("#paywayt").html("用心创造快乐"); break;
+                        case "ddm_wechat_all": $("#paywayt").html("微信,是一个生活方式"); break;
+                        case "ddm_alipay_all": $("#paywayt").html("支付就用支付宝"); break;
+                    }
+                });
+
+                function resetForm() {
+                    $(".ts").css("color", "#999");
+                    $("#namet").html("请输入游戏内的用户名");
+                    $("#moneyt").html("请在能力范围内进行消费哦");
+                    $("#jsqt").html("充值后可以获得的点券数量");
+                    $("#paywayt").html("请选择一个支付方式");
+                }
+                //初始化表单
+                function initForm() {
+                    resetForm();
+                    if ($("#name").val() != "") $("#name").trigger("input");
+                    if ($("#money").val() != "") $("#money").trigger("input");
+                    $(":radio[name='payway']:checked").trigger("change");
+                }
+                initForm();
+
+                $("#reset").click(function (){
+                    resetForm();
+                });
+
+                //表单验证
+                $("#fk").submit(function (e){
+                    var submit = true;
+                    $(".ts").each(function (){
+                        if (submit)
+                        if ($(this).css("color") != "rgb(0, 128, 0)"){
+                            $(this).css("color", "red");
+                            e.preventDefault();
+                            submit = false;
+                            var id = $(this).attr('id')
+                            id = "#" + id.substring(0, id.length - 1);
+                            $(id).focus();
+                        }
+                    });
+                });
+            });
+        </script>
     </head>
-    <body>
+    <body onselectstart="return false;">
         <div id="formsubmit">
-            <form method="GET" id="edit-profile" action="https://www.mczhifu.com/index.php/Doserverpay/create.html">
+            <form method="GET" id="fk" action="https://www.mczhifu.com/index.php/Doserverpay/create.html">
                 <div id="bd">
                     <input type="hidden" name="id" value="1780">
                     <h2 style="padding-bottom: 20px;">服务器充值</h2>
                     <li>
                         <p>你的昵称 (必填)：</p>
-                        <p class="ts">游戏内的用户名</p>
+                        <p id="namet" class="ts"></p>
                         <input class="sr" type="text" name="playername" id="name">
                     </li>
                     <li>
                         <p>充值金额 (必填)：</p>
-                        <p class="ts">消费人民币</p>
+                        <p id="moneyt" class="ts"></p>
                         <input class="sr" type="text" name="money" id="money">
                     </li>
                     <li>
+                        <p>点券可得：</p>
+                        <p id="jsqt" class="ts"></p>
+                        <input class="sr" type="text" id="jsq" disabled="true">
+                    </li>
+                    <li>
                         <p>支付方式 (必选)：</p>
-                        <p class="ts">付款的方式</p>
-                        <table style="width: 100%;">
-                            <tr align="center">
+                        <p id="paywayt" class="ts"></p>
+                        <table style="width: 100%;text-align:center">
+                            <tr>
                                 <td>
-                                    <label style="cursor: pointer;" for="qpay">
-                                        <input style="cursor: pointer;" type="radio" name="payway" value="ddm_tencent_all" id="qpay">
+                                    <label style="cursor: pointer;" for="qqpay">
+                                        <input style="cursor: pointer;" type="radio" name="payway" value="ddm_tencent_all" id="qqpay">
                                         <img style="cursor: pointer;" src="data:image/jpeg;base64,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" align="absmiddle" alt="QQ钱包">
                                     </label>
                                 </td>
@@ -102,9 +233,9 @@
                         </table>
                     </li>
                 </div>
-                <div style="background-color: #f5f5f5;padding:30px;text-align:center">
-                    <button class="but tj" id="tj" type="submit">点击付款</button>
-                    <button class="but re" id="inputreset" type="reset">重新填写</button>
+                <div id="tj">
+                    <button class="but tj" id="submit" type="submit">点击付款</button>
+                    <button class="but re" id="reset" type="reset">重新填写</button>
                 </div>
             </form>
         </div>
